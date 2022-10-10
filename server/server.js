@@ -5,6 +5,7 @@ import cors from 'cors';
 
 import dbConnector from './db/dbConnector.js';
 import * as middleware from './middleware/index.js';
+import ProductRoutes from './routes/productRoutes.js';
 
 
 dotenv.config();
@@ -19,6 +20,8 @@ app.use(cors());
 app.get('/', (req, resp) => {
   resp.send('<h1>File Upload Starter</h1>');
 });
+
+app.use('/api/v1/products', ProductRoutes);
 
 app.use(middleware.notFoundMiddleware);
 app.use(middleware.errorHandlerMiddleware)
