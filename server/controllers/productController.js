@@ -2,11 +2,13 @@ import ProductSchema from '../models/productModel.js';
 import { StatusCodes } from 'http-status-codes';
 
 export const createProduct = async (req, resp) => {
-  resp.send('create product');
+  const product = await ProductSchema.create(req.body);
+  resp.status(StatusCodes.CREATED).json({ product });
 };
 
 export const getAllProducts = async (req, resp) => {
-  resp.send('list all products');
+  const products = await ProductSchema.find({});
+  resp.status(StatusCodes.OK).json({ products })
 };
 
 

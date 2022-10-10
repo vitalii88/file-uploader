@@ -2,6 +2,7 @@ import * as dotenv from 'dotenv';
 import 'express-async-errors'
 import express from 'express';
 import cors from 'cors';
+import fileUpload from 'express-fileupload'
 
 import dbConnector from './db/dbConnector.js';
 import * as middleware from './middleware/index.js';
@@ -14,8 +15,11 @@ const PORT = process.env.PORT || 5001;
 
 const app = express();
 
+app.use(express.static('./public'))
 app.use(express.json());
 app.use(cors());
+app.use(fileUpload());
+
 
 app.get('/', (req, resp) => {
   resp.send('<h1>File Upload Starter</h1>');
