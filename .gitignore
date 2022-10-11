@@ -110,3 +110,4 @@ commitlint.config.js
 .idea/
 .nvmrc
 server/public
+server/tmp

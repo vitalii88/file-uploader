@@ -2,12 +2,13 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { fileURLToPath } from 'url'
 import { StatusCodes } from 'http-status-codes';
-import { CustomApiError, BadRequestError } from '../errors/index.js';
+import { v2 as cloudinary } from 'cloudinary';
+import { BadRequestError } from '../errors/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-export const uploadProductImage = async (req, resp) => {
+export const uploadProductImageLocal = async (req, resp) => {
   // check if file exist
   if (!req.files) {
     throw new BadRequestError('No File Uploaded');
@@ -38,3 +39,13 @@ export const uploadProductImage = async (req, resp) => {
 
   resp.status(StatusCodes.OK).json({ image: { src: `/uploads/${productImage.name}`} })
 };
+
+export const uploadProductImage = async (req, resp) => {
+  const tmpFilePath = req.files.image.tempFilePath;
+  const result = await cloudinary.uploader.upload(tmpFilePath, {
+    use_filename: true,
+    folder: '07_file_uploader',
+  });
+  fs.unlinkSync(tmpFilePath)
+  return resp.status(StatusCodes.OK).json({ image: { src: result.secure_url }});
+}
